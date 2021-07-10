@@ -8,6 +8,7 @@ class Task < ApplicationRecord
       jsonItems = {} 
       task.items.each do |item|
         jsonItems[item.id] = {
+          id: item.id,
           text: item.text,
           complete: item.complete
         }
