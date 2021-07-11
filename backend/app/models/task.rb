@@ -14,6 +14,7 @@ class Task < ApplicationRecord
         }
       end
       jsonTask = {
+        id: task.id,
         title: task.title, 
         description: task.description,
         items: jsonItems
