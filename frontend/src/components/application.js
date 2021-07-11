@@ -18,14 +18,14 @@ class Application {
     CreateHtml.task(task, this)
   }
 
-  renderAllItems(items, ul) {
-    items.forEach(item => {
-      CreateHtml.allItems(item, ul);
-    });
+  renderAllItems(items, task, ul) {
+    for(const [key, item] of Object.entries(items)) {
+      CreateHtml.item(item, task, ul);
+    };
   }
   
   removeAllChildNodes(parent) {
-    while (parent.firstChild) {
+    while(parent.firstChild) {
       parent.removeChild(parent.firstChild);
     }
   }

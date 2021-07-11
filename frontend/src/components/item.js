@@ -6,10 +6,10 @@ class Item {
   }
 
   static createItemsFromJson(json) {
-    const allItems = [];
+    const allItems = {};
     for(const [key, value] of Object.entries(json)) {
       const task = new Item(value);
-      allItems.push(task);
+      allItems[key] = task;
     }
     return allItems;
   }

@@ -30,26 +30,47 @@ class CreateHtml {
     itemsUl.id = 'items'
     li.appendChild(h1);
     li.appendChild(h3);
-    application.renderAllItems(task.items, itemsUl);
+    application.renderAllItems(task.items, task, itemsUl);
     li.appendChild(itemsUl);
+    this.itemForm(li, task, itemsUl);
     li.appendChild(buttonBack);
     li.appendChild(buttonDelete);
     ul.appendChild(li);
     EventCalls.handleBackButton(buttonBack, ul, application);
   }
 
-  static allItems(item, ul) {
+  static item(item, task, ul) {
     const li = document.createElement('li');
     const p = document.createElement('p');
-    const button = document.createElement('button');
+    const buttonDone = document.createElement('button');
+    const buttonRemove = document.createElement('button');
     p.innerText = item.text
     if (item.complete === true) {
       p.classList.add("done");
     }
-    button.innerText = 'Done';
-    p.appendChild(button);
+    buttonDone.innerText = 'Done';
+    buttonRemove.innerText = 'Remove';
+    p.appendChild(buttonDone);
+    p.appendChild(buttonRemove);
     li.appendChild(p);
     ul.appendChild(li);
-    EventCalls.handleDoneButton(button, item, p);
+    EventCalls.handleDoneButton(buttonDone, item, p);
+    EventCalls.handleRemoveItemButton(buttonRemove, task, item, ul, li);
+  }
+
+  static itemForm(li, task, ul) {
+    const form = document.createElement('form');
+    const inpItem = document.createElement('input');
+    const inpSubmit = document.createElement('input')
+    inpItem.type = 'text';
+    inpItem.name = 'item';
+    inpItem.id = 'item';
+    inpItem.placeholder = 'Create a item';
+    inpSubmit.type = 'submit';
+    inpSubmit.value = 'Create Item';
+    form.appendChild(inpItem);
+    form.appendChild(inpSubmit);
+    li.appendChild(form);
+    EventCalls.handleItemForm(form, task, ul);
   }
 }

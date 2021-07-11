@@ -7,4 +7,5 @@ document.addEventListener('DOMContentLoaded', () => {
     return application;
   })
   .then(application => application.execute())
+  .catch((err) => alert(err));
 });
