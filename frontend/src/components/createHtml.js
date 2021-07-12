@@ -12,7 +12,7 @@ class CreateHtml {
     li.appendChild(h3);
     li.appendChild(button);
     ul.appendChild(li);
-    EventCalls.handleGoToTask(button, ul, application, task.id);
+    EventCalls.handleGoToTask(button, application, task.id);
   }
 
   static task(task, application) {
@@ -27,24 +27,29 @@ class CreateHtml {
     h3.innerText = task.description;
     buttonBack.innerText = 'Back';
     buttonDelete.innerText = 'Delete';
-    itemsUl.id = 'items'
+    li.id = 'selected-task';
+    itemsUl.id = 'items';
     li.appendChild(h1);
     li.appendChild(h3);
-    application.renderAllItems(task.items, task, itemsUl);
     li.appendChild(itemsUl);
-    this.itemForm(li, task, itemsUl);
+    ul.appendChild(li);
+    application.renderAllItems(task.items, task);
+    this.itemForm(task);
     li.appendChild(buttonBack);
     li.appendChild(buttonDelete);
     ul.appendChild(li);
-    EventCalls.handleBackButton(buttonBack, ul, application);
+    EventCalls.handleBackButton(buttonBack, application);
+    EventCalls.handleDeleteTaskButton(buttonDelete, application, task.id);
   }
 
-  static item(item, task, ul) {
+  static item(item, task) {
+    const ul = document.querySelector('#items')
     const li = document.createElement('li');
     const p = document.createElement('p');
     const buttonDone = document.createElement('button');
     const buttonRemove = document.createElement('button');
-    p.innerText = item.text
+    p.innerText = item.text;
+    p.id = 'item-text';
     if (item.complete === true) {
       p.classList.add("done");
     }
@@ -54,11 +59,12 @@ class CreateHtml {
     p.appendChild(buttonRemove);
     li.appendChild(p);
     ul.appendChild(li);
-    EventCalls.handleDoneButton(buttonDone, item, p);
+    EventCalls.handleDoneButton(buttonDone, item);
     EventCalls.handleRemoveItemButton(buttonRemove, task, item, ul, li);
   }
 
-  static itemForm(li, task, ul) {
+  static itemForm(task) {
+    const li = document.querySelector('#selected-task');
     const form = document.createElement('form');
     const inpItem = document.createElement('input');
     const inpSubmit = document.createElement('input')
@@ -71,6 +77,6 @@ class CreateHtml {
     form.appendChild(inpItem);
     form.appendChild(inpSubmit);
     li.appendChild(form);
-    EventCalls.handleItemForm(form, task, ul);
+    EventCalls.handleItemForm(form, task);
   }
 }

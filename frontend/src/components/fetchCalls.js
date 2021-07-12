@@ -1,28 +1,44 @@
 class FetchCalls {
-  static updateItemStatus(item, p) {
-    let status = !item.complete
-    fetch(`http://127.0.0.1:3000/items/${item.id}`, {
-      method: 'PATCH',
+  static createNewTask(title, description, application) {
+    fetch('http://127.0.0.1:3000/tasks', {
+      method: 'POST',
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json"
-      }, 
+      },
       body: JSON.stringify({
-        complete: status
-        })
+        title: title,
+        description: description
       })
-      .then(() => {
-      if (status === true) {
-        p.classList.add("done");
-      } else {
-        p.classList.remove("done");
-      }
     })
-    .then(() => item.complete = status)
-    .catch((err) => alert(err));
+    .then(res => res.json())
+    .then(json => {
+      const task = new Task({id: json.id, title: title, description: description, items: {}});
+      application.tasks[json.id] = task;
+      return task;
+    })
+    .then(task => {
+      const ul = document.querySelector('#tasks');
+      application.removeAllChildNodes(ul);
+      CreateHtml.task(task, application);
+    })
+    .catch(err => console.error(err));
   }
 
-  static createNewItem(value, task, ul) {
+  static deleteTask(application, task_id) {
+    fetch(`http://127.0.0.1:3000/tasks/${task_id}`, {
+      method: 'DELETE'
+    })
+    .then(() => delete application.tasks[task_id])
+    .then(() => {
+      const ul = document.querySelector('#tasks');
+      application.removeAllChildNodes(ul);
+      application.renderAllTasks();
+    })
+    .catch(err => alert(err));
+  }
+  
+  static createNewItem(value, task) {
     fetch('http://127.0.0.1:3000/items', {
       method: 'POST',
       headers: {
@@ -39,9 +55,33 @@ class FetchCalls {
     .then(json => {
       const item = new Item({id: json.id, text: value, complete: false})
       task.items[item.id] = item
-      CreateHtml.item(item, task, ul)
+      CreateHtml.item(item, task)
     })
-    .catch((err) => console.log(err));
+    .catch(err => alert(err));
+  }
+
+  static updateItemStatus(item) {
+    let status = !item.complete
+    fetch(`http://127.0.0.1:3000/items/${item.id}`, {
+      method: 'PATCH',
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      }, 
+      body: JSON.stringify({
+        complete: status
+        })
+      })
+      .then(() => {
+      const p = document.querySelector('#item-text');
+      if (status === true) {
+        p.classList.add("done");
+      } else {
+        p.classList.remove("done");
+      }
+    })
+    .then(() => item.complete = status)
+    .catch((err) => alert(err));
   }
 
   static removeItem(task, item, ul, li) {

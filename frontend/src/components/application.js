@@ -4,7 +4,9 @@ class Application {
   }
 
   execute() {
-    this.renderAllTasks()
+    const form = document.querySelector('#new-task-form');
+    EventCalls.handleTaskForm(form, this);
+    this.renderAllTasks();
   }
 
   renderAllTasks() {
@@ -15,12 +17,12 @@ class Application {
 
   renderTask(id) {
     const task = this.tasks[id];
-    CreateHtml.task(task, this)
+    CreateHtml.task(task, this);
   }
 
-  renderAllItems(items, task, ul) {
+  renderAllItems(items, task) {
     for(const [key, item] of Object.entries(items)) {
-      CreateHtml.item(item, task, ul);
+      CreateHtml.item(item, task);
     };
   }
   
