@@ -1,5 +1,5 @@
 class Task < ApplicationRecord
-  has_many :items
+  has_many :items, dependent: :delete_all
 
   def self.allTasksSerialized
     tasks = self.all
@@ -10,7 +10,7 @@ class Task < ApplicationRecord
         jsonItems[item.id] = {
           id: item.id,
           text: item.text,
-          complete: item.complete
+          complete: item.complete,
         }
       end
       jsonTask = {
