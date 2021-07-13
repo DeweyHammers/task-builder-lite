@@ -19,6 +19,8 @@ class Item {
     }
     buttonDone.innerText = 'Done';
     buttonRemove.innerText = 'Remove';
+    buttonDone.className = 'btn btn-success';
+    buttonRemove.className = 'btn btn-danger';
     p.appendChild(buttonDone);
     p.appendChild(buttonRemove);
     li.appendChild(p);
@@ -83,6 +85,7 @@ class Item {
     inpItem.placeholder = 'Create a item';
     inpSubmit.type = 'submit';
     inpSubmit.value = 'Create Item';
+    inpSubmit.className = 'btn btn-primary'
     form.appendChild(inpItem);
     form.appendChild(inpSubmit);
     li.appendChild(form);

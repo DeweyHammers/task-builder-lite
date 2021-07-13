@@ -36,6 +36,8 @@ class Task {
     ul.appendChild(li);
     Item.renderAllItems(this.items);
     Item.itemForm(this);
+    buttonBack.className = 'btn btn-secondary';
+    buttonDelete.className = 'btn btn-danger';
     li.appendChild(buttonBack);
     li.appendChild(buttonDelete);
     ul.appendChild(li);
@@ -92,7 +94,9 @@ class Task {
       button.innerText = "Go to Task"
       li.appendChild(h1);
       li.appendChild(h3);
+      button.className = 'btn btn-info';
       li.appendChild(button);
+      li.className = 'mb-5';
       ul.appendChild(li);
       button.addEventListener('click', () => {
         task.renderTask();

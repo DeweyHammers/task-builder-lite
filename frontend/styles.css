@@ -1,3 +1,23 @@
+body {
+  background-color: #25274D;
+  color: #2E9ccA;
+}
+
+ul {
+  list-style: none;
+}
+
 .done {
   text-decoration: line-through;
+}
+
+.border-new-task {
+  background-color: #464866;
+  width: 100%;
+  max-width: 700px;
+  padding: 15px;
+  margin: auto;
+  border: 1px solid #464866;
+  border-radius: 16px;
+  box-shadow: 0 1rem 3rem rgba(0,0,0,.175);
 }
