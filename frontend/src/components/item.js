@@ -22,8 +22,8 @@ class Item {
     buttonRemove.className = 'btn btn-danger';
     li.className = 'mb-3 card-text';
     li.appendChild(p);
-    li.appendChild(buttonRemove);
     li.appendChild(buttonDone);
+    li.appendChild(buttonRemove);
     ul.appendChild(li);
     buttonDone.addEventListener('click', () => {
       let status = !this.complete;
