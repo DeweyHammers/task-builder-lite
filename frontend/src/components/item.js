@@ -7,13 +7,12 @@ class Item {
   }
 
   renderItem() {
-    const ul = document.querySelector('#items')
+    const ul = document.querySelector('#items');
     const li = document.createElement('li');
     const p = document.createElement('p');
     const buttonDone = document.createElement('button');
     const buttonRemove = document.createElement('button');
     p.innerText = this.text;
-    p.id = 'item-text';
     if (this.complete === true) {
       p.classList.add("done");
     }
@@ -21,9 +20,10 @@ class Item {
     buttonRemove.innerText = 'Remove';
     buttonDone.className = 'btn btn-success';
     buttonRemove.className = 'btn btn-danger';
-    p.appendChild(buttonDone);
-    p.appendChild(buttonRemove);
+    li.className = 'mb-3 card-text';
     li.appendChild(p);
+    li.appendChild(buttonRemove);
+    li.appendChild(buttonDone);
     ul.appendChild(li);
     buttonDone.addEventListener('click', () => {
       let status = !this.complete;
@@ -75,25 +75,44 @@ class Item {
   }
 
   static itemForm(task) {
-    const li = document.querySelector('#selected-task');
+    const card = document.querySelector('.card-body');
+    const formFloat = document.createElement('div');
+    const invalidFeed = document.createElement('div');
     const form = document.createElement('form');
     const inpItem = document.createElement('input');
-    const inpSubmit = document.createElement('input')
+    const label = document.createElement('label');
+    const inpSubmit = document.createElement('input');
+    formFloat.className = 'form-floating mb-1';
+    invalidFeed.className = 'invalid-feedback';
+    invalidFeed.innerText = 'Item cannot be blank!';
     inpItem.type = 'text';
     inpItem.name = 'text';
     inpItem.id = 'text';
     inpItem.placeholder = 'Create a item';
+    inpItem.setAttribute("required", "");
+    form.setAttribute('novalidate', true);
+    inpItem.className = 'form-control';
+    label.innerText = 'Make a new Item';
     inpSubmit.type = 'submit';
     inpSubmit.value = 'Create Item';
-    inpSubmit.className = 'btn btn-primary'
-    form.appendChild(inpItem);
+    inpSubmit.className = 'btn btn-primary w-100'
+    formFloat.appendChild(inpItem);
+    formFloat.appendChild(label);
+    formFloat.appendChild(invalidFeed);
+    form.appendChild(formFloat);
     form.appendChild(inpSubmit);
-    li.appendChild(form);
+    card.appendChild(form);
     form.addEventListener('submit', (event) => {
       event.preventDefault();
       const text = document.querySelector('#text');
-      text.value === '' ? alert('Text cannot be blank!') : Item.create(text.value, task);
-      text.value = '';
+      if (!form.checkValidity()) {
+        event.stopPropagation();
+        form.classList.add('was-validated');
+      } else {
+        form.classList.remove('was-validated');
+        Item.create(text.value, task);
+        text.value = '';
+      }
     });
   }
 

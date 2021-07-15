@@ -1,6 +1,6 @@
 body {
-  background-color: #25274D;
-  color: #2E9ccA;
+  font-family: 'Yomogi', cursive;
+  background-color: #7E7E7E;
 }
 
 ul {
@@ -11,13 +11,30 @@ ul {
   text-decoration: line-through;
 }
 
-.border-new-task {
-  background-color: #464866;
+.border {
+  background-color: #EEEEEE;
   width: 100%;
   max-width: 700px;
   padding: 15px;
   margin: auto;
-  border: 1px solid #464866;
+  border: 1px solid #EEEEEE;
   border-radius: 16px;
   box-shadow: 0 1rem 3rem rgba(0,0,0,.175);
+}
+
+.card-body {
+  background-color: #CCCCCC;
+  width: 100%;
+  max-width: 500px;
+  padding: 15px;
+  margin: auto;
+  border-radius: 16px;
+}
+
+.card-text {
+  background-color: #999999;
+  width: 100%;
+  padding: 15px;
+  margin: auto;
+  border-radius: 16px;
 }

@@ -1,24 +1,20 @@
-const all = {}
-
-const removeAllChildNodes = (parent) => {
-  while(parent.firstChild) {
-    parent.removeChild(parent.firstChild);
-  }
-}
-
 class Task {
+  static all = {}
+
   constructor(json) {
     this.id = json.id;
     this.title = json.title;
     this.description = json.description;
     this.items = Item.createItemsFromJson(json.items, this);
-    all[this.id] = this
+    Task.all[this.id] = this
   }
 
   renderTask() {
     const ul = document.querySelector('#tasks');
-    removeAllChildNodes(ul);
+    ul.className = 'border';
+    Task.removeAllChildNodes(ul);
     const itemsUl = document.createElement('ul')
+    const div = document.createElement('div');
     const li = document.createElement('li');
     const h1 = document.createElement('h1');
     const h3 = document.createElement('h3');
@@ -26,13 +22,16 @@ class Task {
     const buttonDelete = document.createElement('button');
     h1.innerText = this.title;
     h3.innerText = this.description;
+    div.className = 'card-body mb-4';
+    h1.className = 'card-title';
+    h3.className = 'card-subtitle mb-2 text-muted';
     buttonBack.innerText = 'Back';
     buttonDelete.innerText = 'Delete';
-    li.id = 'selected-task';
     itemsUl.id = 'items';
-    li.appendChild(h1);
-    li.appendChild(h3);
-    li.appendChild(itemsUl);
+    div.appendChild(h1);
+    div.appendChild(h3);
+    div.appendChild(itemsUl);
+    li.appendChild(div);
     ul.appendChild(li);
     Item.renderAllItems(this.items);
     Item.itemForm(this);
@@ -42,13 +41,14 @@ class Task {
     li.appendChild(buttonDelete);
     ul.appendChild(li);
     buttonBack.addEventListener('click', () => {
-      removeAllChildNodes(ul);
+      Task.removeAllChildNodes(ul);
       Task.renderAllTasks();
     });
     buttonDelete.addEventListener('click', () => {
       this.delete();
       delete Task.all[this.id]
-      removeAllChildNodes(ul);
+      Task.removeAllChildNodes(ul);
+      ul.classList.remove('border');
       Task.renderAllTasks();
     });
   }
@@ -70,33 +70,28 @@ class Task {
     }
   }
 
-  static taskForm() {
-    const form = document.querySelector('#new-task-form');
-    form.addEventListener('submit', (event) => {
-      event.preventDefault();
-      const title = document.querySelector('#title');
-      const description = document.querySelector('#description');
-      Task.createNewTask(title.value, description.value);
-      title.value = '';
-      description.value = '';
-    })
-  }
-
   static renderAllTasks() {
     for(const [key, task] of Object.entries(Task.all)) {
       const ul = document.querySelector('#tasks');
+      ul.classList.add('border');
+      const div = document.createElement('div');
       const li = document.createElement('li');
       const h1 = document.createElement('h1');
       const h3 = document.createElement('h3');
       const button = document.createElement('button');
+      div.className = 'card-body';
       h1.innerText = task.title;
       h3.innerText = task.description;
-      button.innerText = "Go to Task"
-      li.appendChild(h1);
-      li.appendChild(h3);
+      h1.className = 'card-title';
+      h3.className = 'card-subtitle mb-2 text-muted';
+      button.className = 'card-link';
+      button.innerText = "Go to Task";
+      li.appendChild(div);
+      div.appendChild(h1);
+      div.appendChild(h3);
       button.className = 'btn btn-info';
-      li.appendChild(button);
-      li.className = 'mb-5';
+      div.appendChild(button);
+      li.className = 'mb-3 mt-3';
       ul.appendChild(li);
       button.addEventListener('click', () => {
         task.renderTask();
@@ -104,19 +99,18 @@ class Task {
     }
   }
 
+
   static taskForm() {
     const form = document.querySelector('#new-task-form');
     form.addEventListener('submit', (event) => {
       event.preventDefault();
       const title = document.querySelector('#title');
       const description = document.querySelector('#description');
-      if(title.value === '' && description.value === '') {
-        alert('Title and Description cannot be Blank!')
-      } else if(title.value === '') {
-        alert('Title cannot be blank!')
-      } else if(description.value === '') {
-        alert('Description cannot be Blank!')
+      if (!form.checkValidity()) {
+        event.stopPropagation();
+        form.classList.add('was-validated');
       } else {
+        form.classList.remove('was-validated');
         Task.create(title.value, description.value);
         title.value = '';
         description.value = '';
@@ -139,11 +133,14 @@ class Task {
     .then(res => res.json())
     .then(json => {
       const task = new Task({id: json.id, title: title, description: description, items: {}});
-      return task;
-    })
-    .then(task => {
       task.renderTask();
     })
     .catch(err => console.error(err));
+  }
+
+  static removeAllChildNodes = (parent) => {
+    while(parent.firstChild) {
+      parent.removeChild(parent.firstChild);
+    }
   }
 }
