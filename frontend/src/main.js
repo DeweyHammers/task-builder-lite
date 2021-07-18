@@ -29,21 +29,23 @@ const renderTask = (task) => {
   });
   buttonDelete.addEventListener('click', () => {
     task.delete();
-    delete Task.all[task.id]
-    removeAllChildNodes(ul);
-    ul.classList.remove('border');
-    renderAllTasks();
   });
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     const text = document.querySelector('#text');
-    Item.create(text.value, task);
-    text.value = '';
+    if (!form.checkValidity()) {
+      event.stopPropagation();
+      form.classList.add('was-validated');
+    } else {
+      form.classList.remove('was-validated');
+      Item.create(text.value, task);
+      text.value = '';
+    }
   });
 }
 
 const renderAllItems = (items) => {
-  ul = document.querySelector('#items')
+  ul = document.querySelector('#items');
   const Allitems = [];
   for(const [key, item] of Object.entries(items)) {
     Allitems.push(itemHtml(item));
@@ -52,18 +54,11 @@ const renderAllItems = (items) => {
   for(const [key, item] of Object.entries(items)) {
     const buttonDone = document.querySelector(`#done-item-${item.id}`);
     const buttonRemove = document.querySelector(`#delete-item-${item.id}`);
-    const li = document.querySelector(`#item-${item.id}`);
-    const p = document.querySelector(`#text-item-${item.id}`);
     buttonDone.addEventListener('click', () => {
-      let status = !item.complete;
-      item.update(status);
-      status === true ?  p.classList.add("done") : p.classList.remove("done");
-      item.complete = status;
+      item.update();
     });
     buttonRemove.addEventListener('click', () => {
-      item.delete()
-      delete item.task.items[item.id];
-      ul.removeChild(li);
+      item.delete();
     });
   };
 }
@@ -100,5 +95,5 @@ document.addEventListener('DOMContentLoaded', () => {
     taskForm();
     renderAllTasks();
   })
-  .catch((err) => alert(err));
+  .catch(err => alert('warning', 'Error', err));
 });

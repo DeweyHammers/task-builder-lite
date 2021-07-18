@@ -36,10 +36,11 @@ class Item {
       removeAllChildNodes(ul);
       renderAllItems(task.items);
     })
-    .catch(err => alert(err));
+    .catch(err => alert('warning', 'Error', err));
   }
   
-  update(status) {
+  update() {
+    let status = !this.complete;
     fetch(`http://127.0.0.1:3000/items/${this.id}`, {
       method: 'PATCH',
       headers: {
@@ -50,13 +51,24 @@ class Item {
         complete: status
       })
     })
-    .catch((err) => alert(err));
+    .then(() => {
+      const p = document.querySelector(`#text-item-${this.id}`);
+      status === true ?  p.classList.add("done") : p.classList.remove("done");
+      this.complete = status;
+    })
+    .catch((err) => alert('warning', 'Error', err));
   }
 
   delete() {
     fetch(`http://127.0.0.1:3000/items/${this.id}`, {
       method: 'DELETE'
     })
-    .catch((err) => alert(err));
+    .then(() => {
+      const ul = document.querySelector('#items');
+      const li = document.querySelector(`#item-${this.id}`);
+      delete this.task.items[this.id];
+      ul.removeChild(li);
+    })
+    .catch((err) => alert('warning', 'Error', err));
   }
 }

@@ -38,3 +38,8 @@ ul {
   margin: auto;
   border-radius: 16px;
 }
+
+.alert {
+  width: 40%;
+  margin: auto;
+}

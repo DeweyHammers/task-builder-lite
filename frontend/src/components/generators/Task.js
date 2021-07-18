@@ -21,7 +21,7 @@ const taskHtml = (task) => {
         </ul>
         <form id='item-form' novalidate>
           <div class='form-floating mb-1'>
-            <input type="text" name="text" id="text" placeholder="Create a item" required="" class="form-control">
+            <input type="text" name="text" id="text" placeholder="Create a item" class="form-control" required>
             <label for='text'>Make a new Item</label>
             <div class="invalid-feedback">
               Item cannot be blank!

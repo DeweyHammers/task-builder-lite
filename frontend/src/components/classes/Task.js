@@ -35,14 +35,23 @@ class Task {
     .then(json => {
       const task = new Task({id: json.id, title: title, description: description, items: {}});
       renderTask(task);
+      alert('success', task.title, 'has been successfully created!');
     })
-    .catch(err => console.error(err));
+    .catch(err => alert('warning', 'Error', err));
   }
 
   delete() {
     fetch(`http://127.0.0.1:3000/tasks/${this.id}`, {
       method: 'DELETE'
     })
-    .catch(err => alert(err));
+    .then(() => {
+      const ul = document.querySelector('#tasks');
+      delete Task.all[this.id];
+      removeAllChildNodes(ul);
+      ul.classList.remove('border');
+      renderAllTasks();
+      alert('danger', this.title, 'has been successfully deleted!');
+    })
+    .catch(err => alert('warning','Error', err));
   }
 }
