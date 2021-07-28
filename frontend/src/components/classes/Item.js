@@ -32,9 +32,7 @@ class Item {
     .then(json => {
       const item = new Item({id: json.id, text: text, complete: false, task_id: json.task_id}, task);
       task.items[json.id] = item;
-      ul = document.querySelector('#items');
-      removeAllChildNodes(ul);
-      renderAllItems(task.items);
+      renderItem(item);
     })
     .catch(err => alert('warning', 'Error', err));
   }

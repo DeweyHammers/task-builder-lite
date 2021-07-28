@@ -19,7 +19,7 @@ const renderTask = (task) => {
   ul.classList.add('border');
   removeAllChildNodes(ul);
   ul.innerHTML = taskHtml(task);
-  renderAllItems(task.items);
+  task.items.forEach(item => renderItem(item));
   const buttonBack = document.querySelector('#buttonBack');
   const buttonDelete = document.querySelector('#buttonDelete');
   const form = document.querySelector('#item-form');
@@ -44,23 +44,21 @@ const renderTask = (task) => {
   });
 }
 
-const renderAllItems = (items) => {
+const renderItem = (item) => {
   ul = document.querySelector('#items');
-  const Allitems = [];
-  for(const [key, item] of Object.entries(items)) {
-    Allitems.push(itemHtml(item));
-  };
-  ul.innerHTML = Allitems.join('\n');
-  for(const [key, item] of Object.entries(items)) {
-    const buttonDone = document.querySelector(`#done-item-${item.id}`);
-    const buttonRemove = document.querySelector(`#delete-item-${item.id}`);
-    buttonDone.addEventListener('click', () => {
+  li = document.createElement('li');
+  li.innerHTML = itemHtml(item);
+  li.id = `item-${item.id}`;
+  li.className = 'mb-3 card-text';
+  ul.appendChild(li);
+  const buttonDone = document.querySelector(`#done-item-${item.id}`);
+  const buttonRemove = document.querySelector(`#delete-item-${item.id}`);
+  buttonDone.addEventListener('click', () => {
       item.update();
-    });
-    buttonRemove.addEventListener('click', () => {
-      item.delete();
-    });
-  };
+  });
+  buttonRemove.addEventListener('click', () => {
+    item.delete();
+  });
 }
 
 const taskForm = () => {
