@@ -15,6 +15,16 @@ class Item {
     return allItems;
   }
 
+  renderItem() {
+    const li = document.createElement('li');
+    li.innerHTML = itemHtml(this);
+    li.id = `item-${this.id}`;
+    li.className = 'mb-3 card-text';
+    document.querySelector('#items').appendChild(li);
+    document.querySelector(`#done-item-${this.id}`).onclick = () => this.update();
+    document.querySelector(`#delete-item-${this.id}`).onclick = () => this.delete();
+  }
+
   static create(text, task) {
     fetch('http://127.0.0.1:3000/items', {
       method: 'POST',
@@ -32,7 +42,7 @@ class Item {
     .then(json => {
       const item = new Item({id: json.id, text: text, complete: false, task_id: json.task_id}, task);
       task.items[json.id] = item;
-      renderItem(item);
+      item.renderItem();
     })
     .catch(err => alert('warning', 'Error', err));
   }
@@ -61,12 +71,8 @@ class Item {
     fetch(`http://127.0.0.1:3000/items/${this.id}`, {
       method: 'DELETE'
     })
-    .then(() => {
-      const ul = document.querySelector('#items');
-      const li = document.querySelector(`#item-${this.id}`);
-      delete this.task.items[this.id];
-      ul.removeChild(li);
-    })
+    .then(() => delete this.task.items[this.id])
+    .then(() => document.querySelector('#items').removeChild(document.querySelector(`#item-${this.id}`)))
     .catch((err) => alert('warning', 'Error', err));
   }
 }

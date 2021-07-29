@@ -1,7 +1,7 @@
 class TasksController < ApplicationController
   def index 
-    tasks = Task.allTasksSerialized
-    render json: tasks
+    tasks = Task.all
+    render json: tasks, include: :items
   end
 
   def create
