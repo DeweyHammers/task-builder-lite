@@ -48,7 +48,6 @@ class Item {
   }
   
   update() {
-    let status = !this.complete;
     fetch(`http://127.0.0.1:3000/items/${this.id}`, {
       method: 'PATCH',
       headers: {
@@ -56,13 +55,12 @@ class Item {
         "Accept": "application/json"
       }, 
       body: JSON.stringify({
-        complete: status
+        complete: `${!this.complete}`
       })
     })
     .then(() => {
-      const p = document.querySelector(`#text-item-${this.id}`);
-      status === true ?  p.classList.add("done") : p.classList.remove("done");
-      this.complete = status;
+      document.querySelector(`#text-item-${this.id}`).classList.toggle("done");
+      this.complete = !this.complete;
     })
     .catch((err) => alert('warning', 'Error', err));
   }
