@@ -8,8 +8,8 @@ class Item {
 
   static createItemsFromJson(json, task) {
     const allItems = [];
-    for(const [key, value] of Object.entries(json)) {
-      const item = new Item(value, task);
+    for(const key in json) {
+      const item = new Item(json[key], task);
       allItems[key] = item;
     }
     return allItems;
