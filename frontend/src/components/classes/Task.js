@@ -6,6 +6,7 @@ class Task {
     this.title = json.title;
     this.description = json.description;
     this.items = Item.createItemsFromJson(json.items, this);
+    this.renderTask()
     Task.all[this.id] = this
   }
 
@@ -14,9 +15,8 @@ class Task {
   }
 
   static createTasksFromJson(json) {
-    json.forEach(json => {
-      const task = new Task(json);
-      task.renderTask()
+    json.forEach(task => {
+      new Task(task);
     });
   }
 
@@ -56,8 +56,7 @@ class Task {
   static renderAllTasks() {
     removeAllChildNodes(tasksUl);
     for(const key in Task.all) {
-      const task = Task.all[key];
-      task.renderTask();
+      Task.all[key].renderTask();
     }
   }
 
