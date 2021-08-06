@@ -26,7 +26,7 @@ class Task {
     li.className = 'mb-3 mt-3';
     li.innerHTML = taskHtml(this);
     tasksUl.appendChild(li);
-    document.querySelector(`#task-${this.id}`).onclick = () => this.renderShowTask();
+    li.querySelector('button').onclick = () => this.renderShowTask();
   }
 
   renderShowTask() {
@@ -37,6 +37,12 @@ class Task {
     li.innerHTML = taskShowHtml(this);
     tasksUl.appendChild(li);
     this.items.forEach(item => item.renderItem());
+    const button = document.createElement('button');
+    button.innerText = 'Make Cry';
+    tasksUl.appendChild(button);
+    button.addEventListener('click', () => {
+      Item.create('Make Cry', this);
+    });
     document.querySelector('#buttonBack').onclick = () => Task.renderAllTasks();
     document.querySelector('#buttonDelete').onclick = () => this.delete();
     document.querySelector('#item-form').addEventListener('submit', event => {
